@@ -3,6 +3,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, Check, Copy, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BadgeMedal } from "@/components/kg/BadgeMedal";
+import { FacebookShare } from "@/components/kg/FacebookShare";
+import { badgePost } from "@/lib/share";
 import { useDemoProgress } from "@/lib/demo-store";
 import { BADGE, LEARNER, WORKSHOPS } from "@/data/sample";
 
@@ -131,6 +133,20 @@ function BadgeDetail() {
             passed. Her provider profile was reviewed by a KamotGibo admin. This is a KamotGibo
             platform badge, not a formal qualification.
           </p>
+
+          {badgeIssued ? (
+            <FacebookShare
+              what="your badge"
+              label="Share badge on Facebook"
+              path={`/badges/${b.code}`}
+              build={(url) => badgePost(b, url)}
+              className="mt-5 w-full"
+            />
+          ) : (
+            <p className="mt-5 rounded-2xl border-2 border-dashed px-4 py-3 text-center text-sm text-muted-foreground">
+              You can share this badge on Facebook once it's issued.
+            </p>
+          )}
         </div>
       </article>
     </div>

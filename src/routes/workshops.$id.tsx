@@ -4,7 +4,10 @@ import {
   BadgeCheck,
   CalendarDays,
   Check,
+  BookOpen,
+  ChevronRight,
   Clock,
+  GraduationCap,
   MapPin,
   Users,
 } from "lucide-react";
@@ -13,7 +16,18 @@ import { Button } from "@/components/ui/button";
 import { CraftArt } from "@/components/kg/CraftArt";
 import { MaterialsBox } from "@/components/kg/MaterialsBox";
 import { SeatDots } from "@/components/kg/SeatDots";
-import { WORKSHOPS, formatFee, seatsLabel, type Workshop } from "@/data/sample";
+import { FacebookShare } from "@/components/kg/FacebookShare";
+import { InstructorAvatar } from "@/components/kg/InstructorAvatar";
+import {
+  WORKSHOPS,
+  enrolledCount,
+  enrolledLabel,
+  formatFee,
+  instructorById,
+  seatsLabel,
+  type Workshop,
+} from "@/data/sample";
+import { workshopPost } from "@/lib/share";
 import { cn } from "@/lib/utils";
 import { useDemoProgress } from "@/lib/demo-store";
 
@@ -49,16 +63,6 @@ export const Route = createFileRoute("/workshops/$id")({
   ),
   component: WorkshopDetail,
 });
-
-function initials(name: string) {
-  return name
-    .replace(/\(.*\)/, "")
-    .trim()
-    .split(/\s+/)
-    .map((p) => p[0])
-    .join("")
-    .slice(0, 2);
-}
 
 function BookAction({ w, className }: { w: Workshop; className?: string }) {
   const booked = useDemoProgress().booked.includes(w.id);
@@ -98,6 +102,8 @@ function WorkshopDetail() {
   const { workshop: w } = Route.useLoaderData();
   const full = w.seatsLeft === 0;
   const booked = useDemoProgress().booked.includes(w.id);
+  const instructor = instructorById(w.instructorId);
+  const enrolled = enrolledLabel(enrolledCount(w));
 
   return (
     <div className="mx-auto max-w-6xl px-4 pb-40 pt-6 sm:px-6 md:pb-16">
@@ -132,10 +138,11 @@ function WorkshopDetail() {
             <Fact Icon={MapPin} label="Venue" value={w.venue} sub={w.venueNote} />
             <div className="rounded-2xl border bg-card p-4">
               <dt className="flex items-center gap-2 text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
-                <Users className="size-4" /> Capacity
+                <Users className="size-4" /> Enrollment
               </dt>
               <dd className="mt-1.5">
-                <p className={cn("font-bold", full ? "text-muted-foreground" : "text-foreground")}>
+                <p className="font-bold">{enrolled}</p>
+                <p className={cn("text-sm", full ? "font-bold text-muted-foreground" : "text-muted-foreground")}>
                   {seatsLabel(w)}
                 </p>
                 <div className="mt-2">
@@ -167,22 +174,51 @@ function WorkshopDetail() {
           <MaterialsBox materials={w.materials} />
 
           {/* Instructor */}
-          <section className="flex items-start gap-4 rounded-3xl border bg-card p-5 sm:p-6">
-            <span className="grid size-14 shrink-0 place-items-center rounded-full bg-coral-soft font-display text-xl font-semibold text-primary">
-              {initials(w.instructor)}
-            </span>
-            <div>
+          <Link
+            to="/instructors/$id"
+            params={{ id: w.instructorId }}
+            className="group flex items-start gap-4 rounded-3xl border bg-card p-5 transition-colors hover:border-sea/50 sm:p-6"
+          >
+            <InstructorAvatar
+              name={instructor?.fullName ?? w.instructor}
+              craft={w.craft}
+              className="size-14 text-xl"
+            />
+            <div className="min-w-0 flex-1">
               <p className="text-xs font-extrabold uppercase tracking-widest text-muted-foreground">
                 Instructor
               </p>
-              <h2 className="text-lg font-semibold">{w.instructor}</h2>
+              <h2 className="text-lg font-semibold group-hover:text-primary">{w.instructor}</h2>
+              {instructor && (
+                <p className="text-sm font-bold text-sea">
+                  {instructor.specialization} · {instructor.years} years
+                </p>
+              )}
               <p className="mt-1 text-muted-foreground">{w.instructorNote}</p>
               <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-sea-soft px-3 py-1 text-xs font-bold text-accent-foreground">
                 <BadgeCheck className="size-4" /> Verified provider · profile reviewed by a
                 KamotGibo admin
               </p>
+              <p className="mt-3 flex items-center gap-1 text-sm font-bold text-sea">
+                View profile and other courses <ChevronRight className="size-4" />
+              </p>
             </div>
-          </section>
+          </Link>
+
+          {/* Share + references */}
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <FacebookShare
+              what="this workshop"
+              path={`/workshops/${w.id}`}
+              build={(url) => workshopPost(w, url)}
+              className="w-full sm:w-fit"
+            />
+            <Button asChild variant="secondary" size="lg" className="w-full sm:w-fit">
+              <Link to="/resources" search={{ craft: w.craft }}>
+                <BookOpen /> {w.craft} learning references
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* Desktop booking card */}
@@ -195,6 +231,9 @@ function WorkshopDetail() {
             </p>
             <p className="flex items-center gap-2">
               <Clock className="size-4 text-sea" /> {w.time}
+            </p>
+            <p className="flex items-center gap-2">
+              <GraduationCap className="size-4 text-sea" /> {enrolled}
             </p>
             <p className="flex items-center gap-2">
               <Users className="size-4 text-sea" /> {seatsLabel(w)}
