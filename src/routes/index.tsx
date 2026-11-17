@@ -41,7 +41,7 @@ const STEPS = [
   {
     Icon: BadgeCheck,
     title: "Learn by hand",
-    body: "Train in person. Pass the skill check and earn a platform skill-verified badge.",
+    body: "Train in person. Pass the skill check and earn a Skill-verified ng KamotGibo badge.",
   },
 ];
 

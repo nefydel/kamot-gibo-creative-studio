@@ -32,7 +32,7 @@ const STEPS = [
   {
     Icon: ClipboardCheck,
     title: "Check skills",
-    text: "Mark attendance, check each skill hands-on, and issue a platform skill-verified badge.",
+    text: "Mark attendance, check each skill hands-on, and issue a Skill-verified ng KamotGibo badge.",
   },
 ];
 

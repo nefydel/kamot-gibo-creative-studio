@@ -160,7 +160,7 @@ function WorkshopDetail() {
             </ul>
             <p className="mt-5 rounded-2xl bg-muted px-4 py-3 text-sm text-muted-foreground">
               Learners who pass the instructor's skill check earn a{" "}
-              <strong className="text-foreground">platform skill-verified</strong> badge.
+              <strong className="text-foreground">Skill-verified ng KamotGibo</strong> badge.
             </p>
           </section>
 

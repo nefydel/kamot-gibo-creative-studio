@@ -26,7 +26,7 @@ export const Route = createFileRoute("/learning")({
   head: () => ({
     meta: [
       { title: "My learning · KamotGibo" },
-      { name: "description", content: "Your bookings, attendance, milestones and platform skill-verified badges." },
+      { name: "description", content: "Your bookings, attendance, milestones and Skill-verified ng KamotGibo badges." },
       { property: "og:title", content: "My learning · KamotGibo" },
       { property: "og:description", content: "Your bookings, attendance and badges." },
       { property: "og:type", content: "website" },
@@ -168,7 +168,7 @@ function MyLearning() {
                 <BadgeMedal className="size-20" />
                 <div>
                   <p className="font-bold leading-snug">{BADGE.title}</p>
-                  <p className="text-xs font-bold text-sea">Platform skill-verified</p>
+                  <p className="text-xs font-bold text-sea">Skill-verified ng KamotGibo</p>
                   <p className="mt-1 text-sm text-muted-foreground">Code {BADGE.code}</p>
                 </div>
               </Link>
