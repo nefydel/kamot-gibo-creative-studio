@@ -1,7 +1,7 @@
 import { Shell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/** Scalloped shell medal for a platform skill-verified badge. */
+/** Scalloped shell medal for a Skill-verified ng KamotGibo badge. */
 export function BadgeMedal({ locked = false, className }: { locked?: boolean; className?: string }) {
   const scallops = Array.from({ length: 16 }, (_, i) => {
     const a = (i / 16) * Math.PI * 2;

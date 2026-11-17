@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, MapPin, Users } from "lucide-react";
+import { CalendarDays, GraduationCap, MapPin, Users } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { CraftArt } from "./CraftArt";
-import { formatFee, seatsLabel, type Workshop } from "@/data/sample";
+import { enrolledCount, enrolledLabel, formatFee, seatsLabel, type Workshop } from "@/data/sample";
 import { cn } from "@/lib/utils";
 
 export function WorkshopCard({ workshop: w, className }: { workshop: Workshop; className?: string }) {
@@ -40,6 +40,9 @@ export function WorkshopCard({ workshop: w, className }: { workshop: Workshop; c
           </span>
           <span className="flex items-center gap-1.5">
             <CalendarDays className="size-4" /> {w.nextDate} · {w.time.split(" – ")[0]}
+          </span>
+          <span className="flex items-center gap-1.5">
+            <GraduationCap className="size-4" /> {enrolledLabel(enrolledCount(w))}
           </span>
         </div>
         <div className="mt-auto flex items-center justify-between pt-1">

@@ -1,11 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import {
   ArrowRight,
+  BookOpen,
   CalendarDays,
   CheckCircle2,
   Circle,
+  GraduationCap,
   Lock,
   MapPin,
+  Sprout,
   Ticket,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -15,10 +18,12 @@ import { CraftIcon } from "@/components/kg/CraftArt";
 import { useDemoProgress } from "@/lib/demo-store";
 import {
   BADGE,
+  COURSES,
   LEARNER,
   PAST_SESSIONS,
   WORKSHOPS,
   bookingRef,
+  instructorById,
   milestones,
 } from "@/data/sample";
 
@@ -26,7 +31,7 @@ export const Route = createFileRoute("/learning")({
   head: () => ({
     meta: [
       { title: "My learning · KamotGibo" },
-      { name: "description", content: "Your bookings, attendance, milestones and platform skill-verified badges." },
+      { name: "description", content: "Your bookings, attendance, milestones and Skill-verified ng KamotGibo badges." },
       { property: "og:title", content: "My learning · KamotGibo" },
       { property: "og:description", content: "Your bookings, attendance and badges." },
       { property: "og:type", content: "website" },
@@ -54,6 +59,7 @@ function SectionTitle({ children, count }: { children: React.ReactNode; count?: 
 function MyLearning() {
   const progress = useDemoProgress();
   const upcoming = progress.booked.map(byId);
+  const myCourses = COURSES.filter((c) => progress.enrolledCourses.includes(c.id));
   const steps = milestones(progress);
   const doneCount = steps.filter((s) => s.done).length;
 
@@ -153,6 +159,54 @@ function MyLearning() {
               })}
             </ul>
           </section>
+
+          {/* Upskilling courses */}
+          <section className="rounded-3xl border bg-card p-5 shadow-card sm:p-6">
+            <SectionTitle count={myCourses.length}>My upskilling courses</SectionTitle>
+            {myCourses.length === 0 ? (
+              <div className="mt-4 rounded-2xl border-2 border-dashed p-6 text-center">
+                <p className="font-bold">No courses yet</p>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Go further with advanced techniques, pricing and selling, or product design.
+                </p>
+                <Button asChild variant="outline-sea" className="mt-4">
+                  <Link to="/upskilling" search={{}}>
+                    Browse upskilling <ArrowRight />
+                  </Link>
+                </Button>
+              </div>
+            ) : (
+              <ul className="mt-4 flex flex-col gap-3">
+                {myCourses.map((c) => (
+                  <li key={c.id}>
+                    <Link
+                      to="/courses/$id"
+                      params={{ id: c.id }}
+                      className="flex gap-4 rounded-2xl border bg-background p-4 transition-colors hover:border-sea/50"
+                    >
+                      <span className="grid size-12 shrink-0 place-items-center rounded-2xl bg-sea-soft text-sea">
+                        <CraftIcon craft={c.craft} className="size-6" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-bold leading-snug">{c.title}</p>
+                        <p className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                          <span className="flex items-center gap-1">
+                            <CalendarDays className="size-4" /> {c.schedule} · {c.dates}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <GraduationCap className="size-4" /> {instructorById(c.instructorId)?.name}
+                          </span>
+                        </p>
+                        <Badge variant="success" className="mt-2">
+                          Enrolled
+                        </Badge>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
         </div>
 
         <div className="flex flex-col gap-6">
@@ -168,7 +222,7 @@ function MyLearning() {
                 <BadgeMedal className="size-20" />
                 <div>
                   <p className="font-bold leading-snug">{BADGE.title}</p>
-                  <p className="text-xs font-bold text-sea">Platform skill-verified</p>
+                  <p className="text-xs font-bold text-sea">Skill-verified ng KamotGibo</p>
                   <p className="mt-1 text-sm text-muted-foreground">Code {BADGE.code}</p>
                 </div>
               </Link>
@@ -194,6 +248,40 @@ function MyLearning() {
                 </Button>
               </div>
             )}
+          </section>
+
+          {/* Keep learning */}
+          <section className="flex flex-col gap-3">
+            <Link
+              to="/upskilling"
+              search={{}}
+              className="flex items-center gap-4 rounded-3xl border bg-card p-4 shadow-card transition-colors hover:border-sea/50"
+            >
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-coral-soft text-primary">
+                <Sprout className="size-5" />
+              </span>
+              <span className="flex-1">
+                <span className="block font-bold">Upskilling</span>
+                <span className="block text-sm text-muted-foreground">Courses and instructor profiles</span>
+              </span>
+              <ArrowRight className="size-5 text-sea" />
+            </Link>
+            <Link
+              to="/resources"
+              search={{ craft: "mine" }}
+              className="flex items-center gap-4 rounded-3xl border bg-sea-soft/50 p-4 shadow-card transition-colors hover:border-sea/50"
+            >
+              <span className="grid size-11 shrink-0 place-items-center rounded-2xl bg-sea text-sea-foreground">
+                <BookOpen className="size-5" />
+              </span>
+              <span className="flex-1">
+                <span className="block text-xs font-extrabold uppercase tracking-widest text-sea">
+                  Mga Sanggunian sa Pag-aaral
+                </span>
+                <span className="block font-bold">References for my workshops</span>
+              </span>
+              <ArrowRight className="size-5 text-sea" />
+            </Link>
           </section>
 
           {/* Milestones */}

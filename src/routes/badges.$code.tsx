@@ -3,6 +3,8 @@ import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ArrowLeft, BadgeCheck, Check, Copy, Info } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BadgeMedal } from "@/components/kg/BadgeMedal";
+import { FacebookShare } from "@/components/kg/FacebookShare";
+import { badgePost } from "@/lib/share";
 import { useDemoProgress } from "@/lib/demo-store";
 import { BADGE, LEARNER, WORKSHOPS } from "@/data/sample";
 
@@ -14,7 +16,7 @@ export const Route = createFileRoute("/badges/$code")({
   head: ({ loaderData }) => {
     const b = loaderData?.badge;
     if (!b) return { meta: [{ title: "Badge not found · KamotGibo" }, { name: "robots", content: "noindex" }] };
-    const desc = `${b.title}, a platform skill-verified badge issued by ${b.issuedBy}. Code ${b.code}.`;
+    const desc = `${b.title}, a Skill-verified ng KamotGibo badge issued by ${b.issuedBy}. Code ${b.code}.`;
     return {
       meta: [
         { title: `${b.title} badge · KamotGibo` },
@@ -77,7 +79,7 @@ function BadgeDetail() {
             <BadgeMedal className="size-32" locked={!badgeIssued} />
           </div>
           <p className="relative mt-5 inline-flex items-center gap-1.5 rounded-full bg-sea-foreground px-3 py-1 text-xs font-extrabold uppercase tracking-widest text-sea">
-            <BadgeCheck className="size-4" /> Platform skill-verified
+            <BadgeCheck className="size-4" /> Skill-verified ng KamotGibo
           </p>
           <h1 className="relative mt-3 text-3xl font-semibold text-sea-foreground sm:text-4xl">{b.title}</h1>
           <p className="relative mt-2 text-sea-foreground/85">{badgeIssued ? "Issued to" : "For"} {LEARNER.name}</p>
@@ -131,6 +133,20 @@ function BadgeDetail() {
             passed. Her provider profile was reviewed by a KamotGibo admin. This is a KamotGibo
             platform badge, not a formal qualification.
           </p>
+
+          {badgeIssued ? (
+            <FacebookShare
+              what="your badge"
+              label="Share badge on Facebook"
+              path={`/badges/${b.code}`}
+              build={(url) => badgePost(b, url)}
+              className="mt-5 w-full"
+            />
+          ) : (
+            <p className="mt-5 rounded-2xl border-2 border-dashed px-4 py-3 text-center text-sm text-muted-foreground">
+              You can share this badge on Facebook once it's issued.
+            </p>
+          )}
         </div>
       </article>
     </div>

@@ -22,7 +22,7 @@ export const Route = createFileRoute("/teach/session")({
       { name: "robots", content: "noindex" },
       {
         name: "description",
-        content: "Mark attendance, check skills in person and issue platform skill-verified badges.",
+        content: "Mark attendance, check skills in person and issue Skill-verified ng KamotGibo badges.",
       },
       { property: "og:title", content: "Instructor view · KamotGibo" },
       { property: "og:description", content: "Mark attendance, check skills and issue badges." },
@@ -233,7 +233,7 @@ function InstructorView() {
           })}
         </ul>
         <p className="mt-4 rounded-2xl bg-muted px-4 py-3 text-sm text-muted-foreground">
-          Badges are platform skill-verified: you watched the skill in person and marked it as passed.
+          Badges are Skill-verified ng KamotGibo: you watched the skill in person and marked it as passed.
           Instructors see first names and booking references only. Learner profiles stay private.
         </p>
       </section>

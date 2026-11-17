@@ -21,7 +21,7 @@ export function badgePost(
 ): SharePost {
   return {
     url,
-    text: `I earned the "${b.title}" badge on KamotGibo! ${b.issuedBy.replace(" (sample)", "")} checked my skills in person: ${b.skills.join(", ").toLowerCase()}. Platform skill-verified · code ${b.code}. #KamotGibo #Sorsogon`,
+    text: `I earned the "${b.title}" badge on KamotGibo! ${b.issuedBy.replace(" (sample)", "")} checked my skills in person: ${b.skills.join(", ").toLowerCase()}. Skill-verified ng KamotGibo · code ${b.code}. #KamotGibo #Sorsogon`,
   };
 }
 
